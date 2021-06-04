@@ -20,8 +20,22 @@ typedef struct global{
     int     *sortedtable;
     int     top;
     int     pivot;
+    int     topindex;
+    int     argc;
 }           t_global;
 t_global gl;
+void    swapa(t_pa *temp);
+void    swapb(t_pa *temp);
+void    pushb();
+void    pusha();
+void    rotatea();
+void    rotateb();
+void    reverserotatea(void);
+void    reverserotateb(void);
+void    creatb(int i, int j, int c);
+void    creata(int i, int j, int c);
+void    printtable();
+void    printtable2();
 
 
 
