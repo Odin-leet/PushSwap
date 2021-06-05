@@ -36,6 +36,7 @@ void    creatb(int i, int j, int c);
 void    creata(int i, int j, int c);
 void    printtable();
 void    printtable2();
+void    sortvaleures();
 
 
 

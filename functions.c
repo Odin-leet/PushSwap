@@ -77,7 +77,7 @@ void    reverserotatea(void)
         i++;
     }
   
-    gl.tab[gl.topindex - 1] = temp;
+    gl.tab[i] = temp;
 
 }
 
