@@ -63,33 +63,47 @@ int     checkifsorted(int   *tab, int size)
 void    atob()
 {
     int     i;
-
+    int     size;
     i = 0;
-    gl.top = ((gl.topindex - 1 )/ 2);
-    gl.pivot = gl.sortedtable[gl.top];
+    gl.top = ((gl.pa->index[1] - gl.pa->index[0] )/ 2);
+
+
+   //size = (partition->index[1] - partition->index[0]);
+	//if (size % 2 == 1 || partition == data->B)
+	//	return (data->tmp[partition->index[0] + size / 2]);
+	//return (data->tmp[partition->index[0] + size / 2 - 1]);
+
+    size = gl.pa->index[1] - gl.pa->index[0] ;
+    if ( size % 2 == 1)
+        gl.pivot = gl.sortedtable[(gl.pa->index[1] + gl.pa->index[0]) / 2 ];   
+    else
+    gl.pivot = gl.sortedtable[(gl.pa->index[1] + gl.pa->index[0]) / 2 - 1];
+
     if(gl.topindex - 1 == 1)
     {
         if(gl.tab[gl.topindex - 1] > gl.tab[0])
         swapa(gl.pa);
+        return;
     }
+
     //printf("%d ---- %d\n",gl.pivot,gl.top);
     while (i < gl.top)
     {
         printf("%d ---- %d\n",gl.pivot,gl.top);
        
         
-        if(gl.tab[gl.topindex - 1] <= gl.pivot)
+        if(gl.tab[gl.topindex - 1] < gl.pivot)
         {
             pushb();
             i++;
         }
-        else if(gl.tab[gl.topindex - 2] <= gl.pivot)
-        {
-            swapa(gl.pa);
-            pushb();
-            i++;
-        }
-        else if (gl.tab[gl.pa->index[0]] <= gl.pivot)
+        //else if(gl.tab[gl.topindex - 2] < gl.pivot)
+        //{
+        //    swapa(gl.pa);
+        //    pushb();
+        //    i++;
+        //}
+        else if (gl.tab[gl.pa->index[0]] < gl.pivot)
         {
             reverserotateb();
             pushb();
@@ -112,7 +126,7 @@ void    printtable(int  *tab)
 
     i = 0;
 
-    while (i < gl.topindex  )
+    while (i < gl.topindex - 1)
     {
         printf("---- %d\n",tab[i]);
         i++;
@@ -131,7 +145,10 @@ void    printtable2(int  *tab)
     }
 }
 
+void    sort3valeurs()
+{
 
+}
 int     main(int argc, char **argv)
 {
     int     i;
@@ -160,12 +177,16 @@ int     main(int argc, char **argv)
      gl.sortedtable[i] = gl.tab[i];
      i++;
  }
-printtable(gl.tab) ;    
+printtable(gl.tab) ;
+if (gl.topindex - 1 == 3)
+{
+    sortthreevaleures();
+}    
  gl.sortedtable = BubbleSort(gl.sortedtable,argc - 1);
 while (checkifsorted(gl.tab,gl.topindex - 1) == 0)
 {
     creata(0,gl.topindex - 1, 0);
-    creatb(gl.topindex , gl.topindex, 0);
+    creatb(gl.topindex - 1 , gl.topindex - 1, 0);
     atob();
 }
 }

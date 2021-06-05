@@ -44,7 +44,7 @@ void    rotatea()
         gl.tab[i] = gl.tab[i - 1];
         i--;
     }
-      printf("rra ------- %d --- %d\n  ",temp,gl.topindex);
+    //  printf("rra ------- %d --- %d\n  ",temp,gl.topindex);
     gl.tab[0] = temp;
 }
 
