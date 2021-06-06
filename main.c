@@ -71,7 +71,7 @@ int     checkifsorted(int   *tab, int start,int size)
 
 	i = start;
 	check = 0;
-	if (((gl.pa->index[1] - gl.pa->index[0])  == 0) && (gl.pa->next->statut == 1))
+	if (((gl.pa->index[1] - gl.pa->index[0])  == 0))
 	{
 		gl.pa->statut = 1;
 		return(1);
@@ -98,14 +98,15 @@ void    btoa()
     int     i;
     int     size;
 
-    gl.top = 0;
+    i = 0;
+	gl.top = 0;
 	gl.top = ((gl.pb->index[1] - gl.pb->index[0] )/ 2);
     size = gl.pb->index[1] - gl.pb->index[0] ;
     if ( size % 2 == 1)
 		gl.pivot = gl.sortedtable[(gl.pb->index[1] + gl.pb->index[0]) / 2 ];   
 	else
 		gl.pivot = gl.sortedtable[(gl.pb->index[1] + gl.pb->index[0]) / 2 - 1];
-    if (size == 0)
+    if (size == 0 || size == 1)
     {
         pusha();
 		printtable(gl.tab);
@@ -114,6 +115,33 @@ void    btoa()
 	printf("--------- tab2\n");
         gl.pb = gl.pb->next;
     }
+
+	else
+	{
+		while(i < gl.top)
+		{
+			if(gl.tab[gl.topindex] >= gl.pivot)
+			{
+				pusha();
+				i++;
+			}
+			else if (gl.tab[gl.topindex + 1] >= gl.pivot)
+			{
+				swapb(gl.pb);
+				pusha();
+				i++;
+			}
+			else if(gl.tab[gl.argc - 2] >= gl.pivot)
+			{
+				reverserotateb();
+				pusha();
+				i++;
+			}
+			else
+			rotateb();
+		}
+		gl.pb = gl.pb->next;
+	}
     
     printtable(gl.tab);
 	printf("--------- tab1\n");
@@ -125,8 +153,10 @@ void    atob()
 {
 	int     i;
 	int     size;
+	int 	count;
 
 	i = 0;
+	count = 0;
     gl.top = 0;
 	gl.top = ((gl.pa->index[1] - gl.pa->index[0] )/ 2);
 	size = gl.pa->index[1] - gl.pa->index[0] ;
@@ -165,12 +195,22 @@ void    atob()
 			i++;
 		}
 		else
+		{
 			rotatea();
+			count++;
+		}
+			
 		printtable(gl.tab);
 		printf("--------- tab1\n");
 		printtable2(gl.tab);
 		printf("--------- tab2\n");
 
+	}
+	i = 0;
+	while (i < count)
+	{
+		reverserotatea();
+		i++;
 	}
     addb();
 }
@@ -252,7 +292,7 @@ int     main(int argc, char **argv)
 	creatb(gl.topindex  , gl.topindex , 0);
 	while (1)
 	{   
-		if (checkifsorted(gl.tab,gl.pa->index[0],gl.pa->index[1]) == 0)
+		if (checkifsorted(gl.tab,0,gl.topindex - 1) == 0)
         atob();
         else
         btoa();
