@@ -37,8 +37,8 @@ void    addb()
     t_pa *temp;
 
     temp = (t_pa *)malloc(sizeof(t_pa) * 1);
-    temp->index[0] = gl.pb->index[0];
-    temp->index[1] = gl.pb->index[0];
+    temp->index[0] = gl.pa->index[1];
+    temp->index[1] = gl.pa->index[1];
     temp->statut = 0;
     temp->next = gl.pb;
     gl.pb = temp;
@@ -63,19 +63,14 @@ void creatb(int i, int j, int c)
 	gl.pb->statut = c;
 	gl.pb->next = NULL;
 }
-
-int     checkifsorted(int   *tab, int start,int size)
+int     checkifsortedfinal(int   *tab, int start,int size)
 {
 	int i;
 	int check;
 
 	i = start;
 	check = 0;
-	if (((gl.pa->index[1] - gl.pa->index[0])  == 0))
-	{
-		gl.pa->statut = 1;
-		return(1);
-	}
+
 	while (i < size  - 1)
 	{
 		if(tab[i] > tab[i + 1])
@@ -93,26 +88,47 @@ int     checkifsorted(int   *tab, int start,int size)
 	return(0);
 }
 
+int     checkifsorted(int   *tab, int start,int size)
+{
+	int i;
+
+	i = 0;
+	while (i < (size - 1))
+	{
+		if(tab[start + i] < tab[start + i + 1])
+			return (0);
+		i++;
+	}
+	return(1);
+}
+
 void    btoa()
 {
     int     i;
     int     size;
+	int		count;
 
     i = 0;
-	gl.top = 0;
+	count  = 0;
+	//gl.top = 0;
+	size = gl.pb->index[1] - gl.pb->index[0] ;
+	adda();
 	gl.top = ((gl.pb->index[1] - gl.pb->index[0] )/ 2);
-    size = gl.pb->index[1] - gl.pb->index[0] ;
-    if ( size % 2 == 1)
-		gl.pivot = gl.sortedtable[(gl.pb->index[1] + gl.pb->index[0]) / 2 ];   
-	else
-		gl.pivot = gl.sortedtable[(gl.pb->index[1] + gl.pb->index[0]) / 2 - 1];
-    if (size == 0 || size == 1)
+	gl.pivot = gl.sortedtable[(gl.pb->index[1] + gl.pb->index[0]) / 2 ];   
+
+    if ( size == 1 || size == 2)//|| size == 2)
     {
-        pusha();
-		printtable(gl.tab);
-		printf("--------- tab1\n");
-	printtable2(gl.tab);
-	printf("--------- tab2\n");
+		if (size == 2)
+		{
+			if (gl.tab[gl.topindex] < gl.tab[gl.topindex + 1])
+				swapb(gl.pb);
+			pusha();
+		}
+		pusha();
+	//	printtable(gl.tab);
+	//	printf("--------- tab1\n");
+	//printtable2(gl.tab);
+	//printf("--------- tab2\n");
         gl.pb = gl.pb->next;
     }
 
@@ -120,34 +136,37 @@ void    btoa()
 	{
 		while(i < gl.top)
 		{
-			if(gl.tab[gl.topindex] >= gl.pivot)
+			if(gl.tab[gl.topindex] > gl.pivot)
 			{
 				pusha();
 				i++;
 			}
-			else if (gl.tab[gl.topindex + 1] >= gl.pivot)
-			{
-				swapb(gl.pb);
-				pusha();
-				i++;
-			}
-			else if(gl.tab[gl.argc - 2] >= gl.pivot)
+	//		else if(gl.tab[gl.topindex + 1] > gl.pivot)
+	//	{
+	//		swapb(gl.pb);
+	//		pusha();
+	//	}
+			else if(gl.tab[gl.argc - 2] > gl.pivot && gl.pb->next == NULL)
 			{
 				reverserotateb();
 				pusha();
 				i++;
 			}
 			else
+			{
 			rotateb();
+			count++;
+			}
+
 		}
-		gl.pb = gl.pb->next;
+		while (count--)
+				reverserotateb();
 	}
     
-    printtable(gl.tab);
-	printf("--------- tab1\n");
-	printtable2(gl.tab);
-	printf("--------- tab2\n");
-    adda();
+    //printtable(gl.tab);
+	//printf("--------- tab1\n");
+	//printtable2(gl.tab);
+	//printf("--------- tab2\n");
 }
 void    atob()
 {
@@ -155,26 +174,26 @@ void    atob()
 	int     size;
 	int 	count;
 
+	size = gl.pa->index[1] - gl.pa->index[0];
+	if (size == 2)
+	{
+		if (gl.tab[gl.topindex - 1] > gl.tab[gl.topindex - 2])
+		swapa(gl.pa);
+		return;
+	}
+	addb();
 	i = 0;
 	count = 0;
-    gl.top = 0;
 	gl.top = ((gl.pa->index[1] - gl.pa->index[0] )/ 2);
-	size = gl.pa->index[1] - gl.pa->index[0] ;
 	if ( size % 2 == 1)
 		gl.pivot = gl.sortedtable[(gl.pa->index[1] + gl.pa->index[0]) / 2 ];   
 	else
 		gl.pivot = gl.sortedtable[(gl.pa->index[1] + gl.pa->index[0]) / 2 - 1];
 
-	if(gl.topindex - 1 == 1)
-	{
-		if(gl.tab[gl.topindex - 1] > gl.tab[0])
-			swapa(gl.pa);
-	//	printtable(gl.tab);
-		return;
-	}
+	
 	while (i < gl.top)
 	{
-		printf("%d ---- %d\n",gl.pivot,gl.top);
+	//	printf("%d ---- %d\n",gl.pivot,gl.top);
 
 
 		if(gl.tab[gl.topindex - 1] < gl.pivot)
@@ -182,13 +201,12 @@ void    atob()
 			pushb();
 			i++;
 		}
-		else if(gl.tab[gl.topindex - 2] < gl.pivot)
-		{
-			swapa(gl.pa);
-			pushb();
-			i++;
-		}
-		else if (gl.tab[gl.pa->index[0]] < gl.pivot)
+		//else if(gl.tab[gl.topindex - 2] < gl.pivot)
+		//{
+		//	swapa(gl.pa);
+		//	pushb();
+		//}
+		else if (gl.tab[0] < gl.pivot && gl.pa->next == NULL)
 		{
 			reverserotatea();
 			pushb();
@@ -199,11 +217,11 @@ void    atob()
 			rotatea();
 			count++;
 		}
-			
-		printtable(gl.tab);
-		printf("--------- tab1\n");
-		printtable2(gl.tab);
-		printf("--------- tab2\n");
+	//	
+	//printtable(gl.tab);
+	//printf("--------- tab1\n");
+	//printtable2(gl.tab);
+	//printf("--------- tab2\n");
 
 	}
 	i = 0;
@@ -212,19 +230,19 @@ void    atob()
 		reverserotatea();
 		i++;
 	}
-    addb();
+    
 }
 
 void    printtable(int  *tab)
 {
 	int i;
 
-	i = gl.topindex - 1;
+	i = 0;
 
-	while (i >= 0 )
+	while (i < gl.topindex )
 	{
-		printf("---- %d\n",tab[i]);
-		i--;
+		//printf("---- %d\n",tab[i]);
+		i++;
 	}
 }
 
@@ -233,9 +251,10 @@ void    printtable2(int  *tab)
 	int i;
 
 	i = gl.topindex ;
+	
 	while (i < gl.argc - 1)
 	{
-		printf("---- %d\n",tab[i]);
+		//printf("---- %d\n",tab[i]);
 		i++;
 	}
 }
@@ -259,6 +278,7 @@ void    sortvaleures()
 int     main(int argc, char **argv)
 {
 	int     i;
+	int j;
 
 	int     *temp;
 	i = 1;
@@ -267,10 +287,13 @@ int     main(int argc, char **argv)
 	gl.pb = NULL;
 	gl.pa = NULL;
 	gl.tab = malloc(sizeof(int) * gl.topindex);
-	while (i < argc )
+	i = 0;
+	j = argc - 1;
+	while (j > 0 )
 	{
-		gl.tab[i - 1] = atoi(argv[i]);
+		gl.tab[i] = atoi(argv[j]);
 		i++;
+		j--;
 	}
 	temp = gl.tab;
 	gl.sortedtable = malloc(sizeof(int) * gl.topindex );
@@ -289,16 +312,24 @@ int     main(int argc, char **argv)
 	}    
 	gl.sortedtable = BubbleSort(gl.sortedtable,argc - 1);
 	creata(0,gl.topindex , 0);
-	creatb(gl.topindex  , gl.topindex , 0);
 	while (1)
-	{   
-		if (checkifsorted(gl.tab,0,gl.topindex - 1) == 0)
-        atob();
+	{
+		if (checkifsorted(gl.tab,0, gl.argc- 1) == 1 && (gl.topindex == (gl.argc - 1)))
+			break;
+		if (checkifsorted(gl.tab,gl.pa->index[0], gl.pa->index[1] - gl.pa->index[0]) == 0)
+        	atob();
         else
-        btoa();
+        	btoa();
 
+		
       //  printf("%d\n",gl.pa->index[1]);
 
 	}
+	  
+    //printtable(gl.tab);
+	//printf("--------- tab1\n");
+	//printtable2(gl.tab);
+	//printf("--------- tab2\n");
+	return (0);
     
 }

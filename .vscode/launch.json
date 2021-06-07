@@ -11,7 +11,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "${workspaceFolder}/a.out",
-            "args": ["23","489","0","89","899","70","66","2","789"],
+            "args": ["45","65","89","12","33","7","9","4","24"],
             "cwd": "${workspaceFolder}"
         }
     ]
