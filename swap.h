@@ -13,6 +13,8 @@ typedef struct pa{
     struct pa* next;
 }           t_pa;
 
+
+
 typedef struct global{
     t_pa    *pa;
     t_pa    *pb;
@@ -23,21 +25,21 @@ typedef struct global{
     int     topindex;
     int     argc;
 }           t_global;
-t_global gl;
-void    swapa(t_pa *temp);
-void    swapb(t_pa *temp);
-void    pushb();
-void    pusha();
-void    rotatea();
-void    rotateb();
-void    reverserotatea(void);
-void    reverserotateb(void);
-void    creatb(int i, int j, int c);
-void    creata(int i, int j, int c);
-void    printtable();
-void    printtable2();
-void    sortvaleures();
 
+void    swapa(t_global *gl);
+void    swapb(t_global *gl);
+void    pushb(t_global *gl);
+void    pusha(t_global *gl);
+void    rotatea(t_global *gl);
+void    rotateb(t_global *gl);
+void    reverserotatea(t_global *gl);
+void    reverserotateb(t_global *gl);
+void    creatb(int i, int j, int c,t_global *gl);
+void    creata(int i, int j, int c,t_global *gl);
+void    printtable(int *tab,t_global *gl);
+void    printtable2(int *tab,t_global *gl);
+void    sortvaleures(t_global *gl);
 
+void    all_clear(void  *addr);
 
 #endif
