@@ -251,37 +251,65 @@ void    sortvaleures(t_global *gl)
 			rotatea(gl);
 	}
 }
-int     main(int argc, char **argv)
+
+void 	replirtableau(t_global *gl,char **argv, int j)
 {
-	int     i;
-	int j;
+	int		i;
 
-	int     *temp;
-	i = 1;
-
-	t_global gl;
-	gl.topindex = argc - 1;
-	gl.argc = argc;
-	gl.pb = NULL;
-	gl.pa = NULL;
-	gl.tab = malloc(sizeof(int) * gl.topindex);
 	i = 0;
-	j = argc - 1;
 	while (j > 0 )
 	{
-		gl.tab[i] = atoi(argv[j]);
+		gl->tab[i] = atoi(argv[j]);
 		i++;
 		j--;
 	}
-	temp = gl.tab;
-	gl.sortedtable = malloc(sizeof(int) * gl.topindex );
+}
+
+void	replirsortedtable(t_global *gl)
+{
+	int		i;	
+		
+		gl->sortedtable = malloc(sizeof(int) * gl->topindex );
 	i = 0;
-	while (i < gl.topindex)
+	while (i < gl->topindex)
 	{
-		gl.sortedtable[i] = gl.tab[i];
+		gl->sortedtable[i] = gl->tab[i];
 		i++;
 	}
 
+}
+void	init(t_global *gl, int argi, char **argv1)
+{
+	
+	gl->topindex = argi - 1;
+	gl->argc = argi;
+	gl->pb = NULL;
+	gl->pa = NULL;
+	gl->tab = malloc(sizeof(int) * gl->topindex);
+	replirtableau(gl,argv1,argi - 1);
+	replirsortedtable(gl);
+}
+
+void 	freefuntion(t_global *gl)
+{
+		 t_pa *tmp;
+
+   while (gl->pa != NULL)
+    {
+       tmp = gl->pa;
+       gl->pa = gl->pa->next;
+       free(tmp);
+    }
+	free(gl->tab);
+	free(gl->sortedtable);
+}
+int     main(int argc, char **argv)
+{
+	int     i;
+
+	i = 1;
+	t_global gl;
+	init(&gl,argc, argv);
 	if (argc == 4)
 	{
 		sortvaleures(&gl);
@@ -304,18 +332,8 @@ int     main(int argc, char **argv)
 	printf("--------- tab1\n");
 	printtable2(gl.tab, &gl);
 	printf("--------- tab2\n");
+	freefuntion(&gl);
 
-	 t_pa *tmp;
-
-   // tmp = (t_pa *)malloc(sizeof(t_pa) * 1);
-   while (gl.pa != NULL)
-    {
-       tmp = gl.pa;
-       gl.pa = gl.pa->next;
-       free(tmp);
-    }
-	free(gl.tab);
-	free(gl.sortedtable);
 
 	while (1);
 
