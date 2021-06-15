@@ -1,107 +1,50 @@
- #include "swap.h"
+#include "swap.h"
 
-void    swapa(t_global *gl)
-{
-    int     swap;
+void	rotateb(t_global *gl)
+{	
+	int	i;
+	int	temp;
 
-    swap = gl->tab[gl->topindex - 1];
-    gl->tab[gl->topindex - 1] = gl->tab[gl->topindex - 2];
-    gl->tab[gl->topindex - 2] = swap; 
-    printf("sa\n");
+	i = gl->topindex;
+	temp = gl->tab[gl->topindex];
+	while (i < gl->argc - 2)
+	{
+		gl->tab[i] = gl->tab[i + 1];
+		i++;
+	}
+	gl->tab[i] = temp;
+	printf("rb\n");
 }
 
-void    swapb(t_global *gl)
+void	reverserotatea(t_global *gl)
 {
-    int     swap;
+	int	i;
+	int	temp;
+	int	temp2;
 
-    swap = gl->tab[gl->topindex ];
-    gl->tab[gl->topindex ] = gl->tab[gl->topindex + 1];
-    gl->tab[gl->topindex + 1] = swap; 
-    printf("sb\n");
+	i = 0;
+	temp = gl->tab[0];
+	while (i < gl->topindex - 1)
+	{
+		gl->tab[i] = gl->tab[i + 1];
+		i++;
+	}
+	gl->tab[i] = temp;
+	printf("rra\n");
 }
 
-void    pushb(t_global *gl)
-{
-    gl->pa->index[1]--;
-    gl->pb->index[0]--;
-    gl->topindex--; 
-    printf("pb\n");
-}
-void    pusha(t_global *gl)
-{
-    gl->pa->index[1]++;
-    gl->pb->index[0]++; 
-    gl->topindex++;
-    printf("pa\n");
-}
-void    rotatea(t_global *gl)
-{
-    int     temp;
-    int     temp2;
-    int     i;
+void	reverserotateb(t_global *gl)
+{	
+	int	i;
+	int	temp;
 
-    i = gl->topindex - 1;
-    temp = gl->tab[gl->topindex - 1];
-    while (i > 0)
-    {
-        temp2 = gl->tab[i];
-        gl->tab[i] = gl->tab[i - 1];
-        i--;
-    }
-    //  printf("rra ------- %d --- %d\n  ",temp,gl.topindex);
-    gl->tab[0] = temp;
-    printf("ra\n");
-}
-
-void    rotateb(t_global *gl)
-{
-    int     i;
-    int     temp;
-
-    i = gl->topindex ;
-    temp = gl->tab[gl->topindex];
-    while (i < gl->argc - 2)
-    {
-        gl->tab[i] = gl->tab[i + 1];
-        i++;
-    }
-    gl->tab[i] = temp;
-    printf("rb\n");
-}
-
-void    reverserotatea(t_global *gl)
-{
-    int     i;
-    int     temp;
-    int     temp2;
-
-    i = 0;
-    temp = gl->tab[0];
-    while (i < gl->topindex - 1)
-    {
-        //temp2 = gl.tab[i];
-        gl->tab[i ] = gl->tab[i + 1];
-        i++;
-    }
-  
-    gl->tab[i] = temp;
-    printf("rra\n");
-
-}
-
-void    reverserotateb(t_global *gl)
-{
-    int     i;
-    int     temp;
-
-    i = gl->argc - 2;
-    temp = gl->tab[gl->argc - 2];
-    while (i >  gl->topindex )
-    {
-        gl->tab[i] = gl->tab[i - 1];
-        i--;
-    }
-    gl->tab[gl->topindex ] = temp;
-    printf("rrb\n");
-
+	i = gl->argc - 2;
+	temp = gl->tab[gl->argc - 2];
+	while (i > gl->topindex)
+	{
+		gl->tab[i] = gl->tab[i - 1];
+		i--;
+	}
+	gl->tab[gl->topindex] = temp;
+	printf("rrb\n");
 }
